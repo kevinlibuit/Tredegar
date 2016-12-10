@@ -1,0 +1,93 @@
+# seq_ID dependencies installation script for an AWS EC2 instance launched from the DCLS GDIP image ami-9f630088.
+
+
+# custom colours for terminal
+echo "export LSCOLORS=ExGxBxDxCxEgEdxbxgxcxd" >> ~/.bashrc
+echo "source ~/.bashrc" >> ~/.bash_profile
+
+################################################################################
+MASH
+################################################################################
+
+# MASH binary
+wget https://github.com/marbl/Mash/releases/download/v1.1.1/mash-Linux64-v1.1.1.tar.gz
+tar -xzvf mash-Linux64-v1.1.1.tar.gz
+echo 'export PATH="~/mash-Linux64-v1.1.1/:$PATH"' >> ~/.bash_profile
+rm mash-Linux64-v1.1.1.tar.gz
+
+# Hashed RefSeq db
+wget https://gembox.cbcb.umd.edu/mash/RefSeqSketchesDefaults.msh.gz
+gunzip RefSeqSketchesDefaults.msh.gz
+sudo mv RefSeqSketchesDefaults.msh /opt/genomes 
+
+################################################################################
+## seqsero
+################################################################################
+
+# dependencies
+sudo apt-get upgrade
+sudo apt-get install bwa
+
+# seqsero
+git clone https://github.com/denglab/SeqSero.git
+echo 'export PATH="~/SeqSero/:$PATH"' >> ~/.bash_profile
+
+
+################################################################################
+## serotypeFinder + SPAdes
+################################################################################
+
+## serotypeFinder dependencies 
+curl -L http://install.perlbrew.pl | bash
+echo "source ~/perl5/perlbrew/etc/bashrc" >> ~/.bash_profile
+
+perlbrew init
+perlbrew install-cpanm
+
+sudo apt-get install expat apache2
+# apache src located in /var/www/html/
+
+# install blast legacy
+wget ftp://ftp.ncbi.nlm.nih.gov/blast/executables/legacy/2.2.26/blast-2.2.26-x64-linux.tar.gz
+tar -zxvf blast-2.2.26-x64-linux.tar.gz
+sudo mv blast-2.2.26 /opt/software/
+rm blast-2.2.26-x64-linux.tar.gz
+
+
+perl -MCPAN -e shell
+# in cpan shell
+cpan> install Module::Build
+cpan> o conf prefer_installer MB
+cpan> o conf commit
+cpan> force install CJFIELDS/BioPerl-1.6.924.tar.gz
+cpan> install Data::Dumper
+cpan> install Getopt::Long
+cpan> install Try::Tiny::Retry
+cpan> q
+
+
+# clone serotypeFinder repo
+git clone https://bitbucket.org/genomicepidemiology/serotypefinder.git
+echo 'export PATH="~/serotypefinder/:$PATH"' >> ~/.bash_profile
+
+# get salmonella serotype database
+cd ~/serotypefinder
+./INSTALL_DB seroTF_database
+sudo mv ~/serotypefinder/seroTF_database /opt/genomes/
+
+# SPAdes binary
+wget http://spades.bioinf.spbau.ru/release3.9.0/SPAdes-3.9.0-Linux.tar.gz
+tar -xzf SPAdes-3.9.0-Linux.tar.gz
+echo 'export PATH="~/SPAdes-3.9.0-Linux/bin/:$PATH"' >> ~/.bash_profile
+rm SPAdes-3.9.0-Linux.tar.gz
+
+source ~/.bash_profile
+
+################################################################################
+## BaseMount
+################################################################################
+
+sudo bash -c "$(curl -L https://basemount.basespace.illumina.com/install)"
+mkdir BaseSpace
+basement BaseSpace
+# copy link to browser and sign-in to BaseSpace account

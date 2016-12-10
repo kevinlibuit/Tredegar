@@ -7,7 +7,7 @@ Usage $0 -i <input_dir> -o <output_dir>
 
 options:
 -h, --help              Show brief help.
--i, --input=DIR         Specify path to BaseSpace project. Seq_ID assumes the input directory is a DCLS BaseSpace project within the mounted BaseSpace profile that contains multiple samples and read files ending in  R[1,2]_001.fastq.gz
+-i, --input=DIR         Name of DCLS BaseSpace project. Seq_ID assumes input to be a DCLS BaseSpace project within the mounted BaseSpace profile that contains multiple samples and read files ending in  R[1,2]_001.fastq.gz
 -o, --output-dir=DIR    specify a directory to store output
 
 After running, a seq_ID report can be found within the output directory specificed and opened in Microsoft Excel.
