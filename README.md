@@ -20,7 +20,7 @@ All results are compiled into a single seq\_ID report. This report can be access
 
 ---
 
-<sup>\*The majority of isolates sequenced at the DCLS are *Salonella* spp. and *Escherichia coli*. For this reason, verifification of species does little for quality assurance. E.g. if an entire sequencing run contains *Salmonella enterica* isoaltes of different serotypes, confirming the species will not help to identify mislabeled samples within that run. </sup>
+<sup>\*The majority of isolates sequenced at the DCLS are *Salonella* spp. and *Escherichia coli*. For this reason, verification of species does little for quality assurance. E.g. if an entire sequencing run contains *Salmonella enterica* isoaltes of different serotypes, confirming the species will not help to identify mislabeled samples within that run. </sup>
 
 
 ##Basic usage: 
@@ -42,7 +42,7 @@ $ make
 
 |  Script | Discription   | 
 | --- | --- |
-|rename\_basespace\_files | Removes cruft (i.e. set number) from BaseSpace File name|
+|rename\_basespace\_files.sh | Removes cruft (i.e. set number) from BaseSpace File name|
 |initial\_id.sh | Runs MASH, a fast genome and metagenome distance estimation using MinHash, to determine the taxonomic identitify of all isolates with high resolution up to the species level.|
 |seq\_id\_report.sh| Generates a raw.csv file containing MASH results
 |assemble_ecoli.sh| Runs SPAdes to generate *de novo* assemblies for *E.coli* isolates to be used as input to serotypeFinder|
