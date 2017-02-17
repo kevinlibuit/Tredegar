@@ -15,7 +15,7 @@ if [[ "$1" == "-h" ]] ; then
 fi
 
 # Create list of samples identified as E.coli by MASH
-ecoli_isolates="$(awk -F';' '$2 ~ /Escherichia_coli/' ./sample_id/raw.csv | awk -F ';' '{print$1}')"
+ecoli_isolates="$(awk -F';' '$2 ~ /Escherichia_col/' ./sample_id/raw.csv | awk -F ';' '{print$1}')"
 
 # Copy raw.csv 
 cp ./sample_id/raw.csv ./sample_id/ecoli.csv
