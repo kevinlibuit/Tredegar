@@ -7,7 +7,7 @@ Usage $0 -i <input_dir> -o <output_dir>
 
 options:
 -h, --help              Show brief help.
--i, --input=DIR         Name of DCLS BaseSpace project. Seq_ID assumes input to be a DCLS BaseSpace project within the mounted BaseSpace profile that contains multiple samples and read files ending in  R[1,2]_001.fastq.gz
+-i, --input=DIR         Specify path to BaseSpace project. Seq_ID assumes the input directory is a DCLS BaseSpace project within the mounted BaseSpace profile that contains multiple samples and read files ending in  R[1,2]_001.fastq.gz
 -o, --output-dir=DIR    specify a directory to store output
 
 After running, a seq_ID report can be found within the output directory specificed and opened in Microsoft Excel.
@@ -60,7 +60,11 @@ if ls  ./${output_dir}/*seq_ID_report.csv 1> /dev/null 2>&1; then
 	echo "A seq_ID_report already exists in ${output_dir}. The .csv file can be opened and analyzed in Microsoft Excel."
 elif ls ~/BaseSpace/Projects/${input_dir}/Samples/*/Files/*.fastq.gz 1> /dev/null 2>&1; then
 	# Create the proper directories and run the pipeline
-	mkdir ./${output_dir}/raw_reads/ -p && ln -s ~/BaseSpace/Projects/${input_dir}/Samples/*/Files/*.fastq.gz ./${output_dir}/raw_reads/ && rename_basespace_files.sh ${output_dir} && copy_seq_ID_makefile ${output_dir} && make -C ./${output_dir}
+	mkdir ./${output_dir}/raw_reads/ -p
+	ln -s ~/BaseSpace/Projects/${input_dir}/Samples/*/Files/*.fastq.gz ./${output_dir}/raw_reads/
+	rename_basespace_files.sh ${output_dir} 
+	copy_seq_ID_makefile ${output_dir} 
+	make -C ./${output_dir}
 else
 	echo "No read files found in BaseSpace project ${input_dir}. Please enter valid project path to run seq_ID."
 fi
