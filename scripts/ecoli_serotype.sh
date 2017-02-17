@@ -25,7 +25,7 @@ fi
 
 
 # Create list of samples identified as E.coli by MASH
-ecoli_isoaltes="$(awk -F ';' '$2 ~ /Escherichia_coli/' ./sample_id/raw.csv | awk -F ';' '{print$1}')"
+ecoli_isoaltes="$(awk -F ';' '$2 ~ /Escherichia_col/' ./sample_id/raw.csv | awk -F ';' '{print$1}')"
 
 # Check to see if a serotypeFinder_output dir already exsits. If not, make one
 if ls ./serotypeFinder_output/  1> /dev/null 2>&1; then
