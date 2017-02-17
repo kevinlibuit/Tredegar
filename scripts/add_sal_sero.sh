@@ -16,6 +16,8 @@ fi
 
 # create list of samples identified as Salmonella spp. by MASH
 sal_isolates="$(awk -F';' '$2 ~ /Salmonella/' ./sample_id/ecoli.csv | awk -F ';' '{print$1}')"
+# catch ambiguous SeqSero results
+oddity="See comments below*"
 
 # Copy ecoli.csv
 cp ./sample_id/ecoli.csv ./sample_id/ecoli_sal.csv
@@ -27,8 +29,14 @@ do
   row_number="$(grep -n ${i} ./sample_id/ecoli_sal.csv | cut -d : -f 1)"
   # Copy SeqSero's predicted serotype
   sal_serotype="$(grep 'Predicted serotype(s):' ./SeqSero_output/${i}/Seqsero_result.txt | awk -F$'\t' '{print $2}')"
+  # Check for ambigious results; edit sample.csv as needed
+  if [ "$sal_serotype" == "$oddity" ] ; then
+    comment="$(grep '*' ./SeqSero_output/${i}/Seqsero_result.txt| awk 'NR==2' | tr -s " ")"
+    echo "awk -F';' 'FNR == ${row_number} {\$4 =\" ${comment}\"; print}' ./sample_id/ecoli_sal.csv >> ./sample_id/ecoli_sal.csv" | bash && echo "sed -i ${row_number}d ./sample_id/ecoli_sal.csv" | bash
+  else
   # Edit sample_id.csv using sample's row number and SeqSero results
-  echo "awk -F';' 'FNR == ${row_number} {\$4 =\" ${sal_serotype}\"; print}' ./sample_id/ecoli_sal.csv >> ./sample_id/ecoli_sal.csv" | bash && echo "sed -i ${row_number}d ./sample_id/ecoli_sal.csv" | bash
+    echo "awk -F';' 'FNR == ${row_number} {\$4 =\" ${sal_serotype}\"; print}' ./sample_id/ecoli_sal.csv >> ./sample_id/ecoli_sal.csv" | bash && echo "sed -i ${row_number}d ./sample_id/ecoli_sal.csv" | bash
+  fi
 done
 
 # Add semicolon back to edited row
