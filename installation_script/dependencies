@@ -26,7 +26,12 @@ sudo mv RefSeqSketchesDefaults.msh /opt/genomes
 
 # dependencies
 sudo apt-get upgrade
-sudo apt-get install bwa
+wget https://sourceforge.net/projects/bio-bwa/files/bwa-0.7.15.tar.bz2
+tar -xjvf bwa-0.7.15.tar.bz2
+cd bwa-0.7.15
+make
+cp bwa /usr/bin/
+rm -rf bwa-0.7.15.tar.bz2
 
 # seqsero
 git clone https://github.com/denglab/SeqSero.git
