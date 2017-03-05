@@ -45,6 +45,7 @@ echo 'export PATH=~/SeqSero/:$PATH' >> ~/.bash_profile
 ## serotypeFinder dependencies 
 curl -L http://install.perlbrew.pl | bash
 echo "source ~/perl5/perlbrew/etc/bashrc" >> ~/.bash_profile
+source ~/.bash_profile
 
 perlbrew init
 perlbrew install-cpanm
