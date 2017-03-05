@@ -12,7 +12,7 @@ MASH
 # MASH binary
 wget https://github.com/marbl/Mash/releases/download/v1.1.1/mash-Linux64-v1.1.1.tar.gz
 tar -xzvf mash-Linux64-v1.1.1.tar.gz
-echo 'export PATH="~/mash-Linux64-v1.1.1/:$PATH"' >> ~/.bash_profile
+echo 'export PATH=~/mash-Linux64-v1.1.1/:$PATH' >> ~/.bash_profile
 rm mash-Linux64-v1.1.1.tar.gz
 
 # Hashed RefSeq db
@@ -35,7 +35,7 @@ rm -rf bwa-0.7.15.tar.bz2
 
 # seqsero
 git clone https://github.com/denglab/SeqSero.git
-echo 'export PATH="~/SeqSero/:$PATH"' >> ~/.bash_profile
+echo 'export PATH=~/SeqSero/:$PATH' >> ~/.bash_profile
 
 
 ################################################################################
@@ -73,7 +73,7 @@ cpan> q
 
 # clone serotypeFinder repo
 git clone https://bitbucket.org/genomicepidemiology/serotypefinder.git
-echo 'export PATH="~/serotypefinder/:$PATH"' >> ~/.bash_profile
+echo 'export PATH=~/serotypefinder/:$PATH' >> ~/.bash_profile
 
 # get salmonella serotype database
 cd ~/serotypefinder
@@ -83,7 +83,7 @@ sudo mv ~/serotypefinder/seroTF_database /opt/genomes/
 # SPAdes binary
 wget http://spades.bioinf.spbau.ru/release3.9.0/SPAdes-3.9.0-Linux.tar.gz
 tar -xzf SPAdes-3.9.0-Linux.tar.gz
-echo 'export PATH="~/SPAdes-3.9.0-Linux/bin/:$PATH"' >> ~/.bash_profile
+echo 'export PATH=~/SPAdes-3.9.0-Linux/bin/:$PATH' >> ~/.bash_profile
 rm SPAdes-3.9.0-Linux.tar.gz
 
 source ~/.bash_profile
