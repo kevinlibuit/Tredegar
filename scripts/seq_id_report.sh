@@ -31,6 +31,6 @@ do
   # Strip off the _1.fastq.gz to get just the sample name
   sample_name="$(echo $sample_file | sed 's/_R1\.fastq.gz//g')"
   # Get MASH output and compile data into single csv file
-  echo "${sample_name}; $(head -1 ./mash_output/${sample_name}_distance.tab | sed 's/.*-.-//' | grep -o '^\S*' | sed -e 's/\(..fna\)*$//g'); $(head -1 ./mash_output/${sample_name}_distance.tab | awk '{ print $3 }'); -; -" >> ./sample_id/raw.csv
+  echo "${sample_name}; $(head -1 ./mash_output/${sample_name}_distance.tab | sed 's/.*-\.-//' | grep -o '^\S*' | sed -e 's/\(..fna\)*$//g'); $(head -1 ./mash_output/${sample_name}_distance.tab | awk '{ print $3 }'); -; -" >> ./sample_id/raw.csv
 done
 
