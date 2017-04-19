@@ -1,6 +1,6 @@
 seq_id_dir := ~/seq_id/scripts/
-DATE := $(shell date +%F)
-all: ./flag_files/mash.happened ./sample_id/raw.csv ./flag_files/spades.happened ./flag_files/seroTF.happened ./sample_id/ecoli.csv ./flag_files/seqsero.happened ./${DATE}_seq_ID_report.csv
+current_dir := $(shell basename $(CURDIR))
+all: ./flag_files/mash.happened ./sample_id/raw.csv ./flag_files/spades.happened ./flag_files/seroTF.happened ./sample_id/ecoli.csv ./flag_files/seqsero.happened ./${current_dir}_seq_ID_report.csv
 
 clean:
 	rm -rf ./mash_output/* ./ecoli_assemblies/* ./serotypeFinder_output/* ./seqsero_output/* ./sample_id.csv ./flag_files
@@ -32,6 +32,6 @@ clean:
 	${seq_id_dir}sal_serotype.sh
 
 # Edit sample-id.csv to include seqsero results
-./${DATE}_seq_ID_report.csv: ./flag_files/seqsero.happened
+./${current_dir}_seq_ID_report.csv: ./flag_files/seqsero.happened
 	${seq_id_dir}add_sal_sero.sh
-	cp ./sample_id/ecoli_sal.csv ./${DATE}_seq_ID_report.csv
+	cp ./sample_id/ecoli_sal.csv ./${current_dir}_seq_ID_report.csv
