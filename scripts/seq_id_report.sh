@@ -21,7 +21,7 @@ fi
 mkdir ./sample_id/ && touch ./sample_id/raw.csv
 
 # specify delimiter and create header
-echo "sep=;"  >> ./sample_id/raw.csv && echo "Sample; MASH-ID; P-value; SeqSero; SerotypeFinder" >> ./sample_id/raw.csv
+echo "sep=;"  >> ./sample_id/raw.csv && echo "Sample; MASH-ID; MASH-distance; SeqSero; SerotypeFinder" >> ./sample_id/raw.csv
 
 # Fill raw.csv with appropriate data
 for i in ./raw_reads/*R1.fastq.gz
