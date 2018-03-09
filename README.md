@@ -2,7 +2,7 @@
 A bioinformatics pipeline for organism identification and sample-label verification of whole genome sequence (WGS) data produced at the DCLS
 
 
-##Rationale 
+## Rationale 
 
 
 The DCLS is in need for a quality assurance pipeline to verify sample ID labels prior to publishing sequence data. 
