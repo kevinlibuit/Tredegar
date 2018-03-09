@@ -9,7 +9,7 @@ blast="/opt/software/blast-2.2.26/"
 
 
 HELP="
-Shell script of the seq_ID pipeline. Assumes E.coli assemblies exists in the project directory within the subdirecotires /ecoli_assemblies/<sample_name>/
+Shell script of the Tredegar pipeline. Assumes E.coli assemblies exists in the project directory within the subdirecotires /ecoli_assemblies/<sample_name>/
 
 Running in the project directory will serotype E.coli isolates using serotypeFinder. Serotype results will be located in a new direcotry, <project_dir>/serotypeFinder_output/<sample_name>. If no E.coli isolates exist in the project, serotypeFinder_output will be an empty directory.
 

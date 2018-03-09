@@ -3,7 +3,7 @@ set -e
 set -o pipefail
 
 HELP="
-Shell script part of the seq_ID pipeline. Assumes ./sample_id/ecoli.csv exists in the project working directory.
+Shell script part of the Tredegar pipeline. Assumes ./sample_id/ecoli.csv exists in the project working directory.
 
 Running in the project directory will serotype Salmonella spp. isolates using SeqSero. Serotype results will be located in a new direcotry, <project_dir>/SeqSero_output/<sample_name>. If no Salmonella spp. isolates exist in the project, SeqSero_output will be an empty directory.
 

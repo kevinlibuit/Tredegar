@@ -3,7 +3,7 @@ set -e
 set -o pipefail
 
 HELP="
-Shell script part of the seq_ID pipeline. Assumes ./sample_id/raw.csv exists in the project working directory. 
+Shell script part of the Tredegar pipeline. Assumes ./sample_id/raw.csv exists in the project working directory. 
 
 Running in the project directory will generate assemblies for isolates identified as E.coli by MASH. Assemblies will be located in a new direcotry, ecoli_assemblies/<sample_name>.
 

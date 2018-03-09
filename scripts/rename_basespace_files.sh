@@ -4,7 +4,7 @@ set -u
 set -o pipefail
 
 HELP="
-Shell script part of the seq_ID pipeline. Assumes pair end fastq files exist in the project directory within the subdirectroy /raw_reads/. 
+Shell script part of the Tredegar pipeline. Assumes pair end fastq files exist in the project directory within the subdirectroy /raw_reads/. 
 
 Running in the project directory will strip the MiSeq set number (001) from the file name.
 "

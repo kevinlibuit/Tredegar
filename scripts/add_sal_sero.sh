@@ -3,7 +3,7 @@ set -e
 set -o pipefail
 
 HELP="
-Shell script part of the seq_ID piepeline. Assumes Salmonella spp. isolates have been serotyped with SeqSero and results exist in the proect directroy within the subdirectories /SeqSero_output/<sample_name>/
+Shell script part of the Tredegar piepeline. Assumes Salmonella spp. isolates have been serotyped with SeqSero and results exist in the proect directroy within the subdirectories /SeqSero_output/<sample_name>/
 
 Running in the project directory will parse through SeqSero output to update <projecti_dir>/sample_id/ecoli.csv. The updated file will be renamed to <project_dir>/sample_id/ecoli_sal.csv. If no Salmonella spp. isoaltes exist in the current project, <projecti_dir>/sample_id/ecoli.csv and <projecti_dir>/sample_id/ecoli_sal.csv will be identical.
 "

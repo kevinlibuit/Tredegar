@@ -4,7 +4,7 @@ set -o pipefail
 
 
 HELP="
-Shell script part of the seq_ID pipeline. Assumes pair end files ending in .fastq.gz exist in the project directory within the subdirectory /raw_reads/.
+Shell script part of the Tredegar pipeline. Assumes pair end files ending in .fastq.gz exist in the project directory within the subdirectory /raw_reads/.
 
 Running in the project directory will concatenate the raw reads and use the concatonated will be input to MASH--a fast genome and metagenome distance estimation using MinHash--for genome identication. Mash output for all samples will be sent to /project_dir/mash_output/. Additionally, the *distance.tab files will be sorted by p-value, lowest to highest.
 
