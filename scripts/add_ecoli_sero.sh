@@ -26,7 +26,7 @@ do
   # Identify the sample's row number within sample_id.csv
   row_number="$(grep -n ${i} ./sample_id/ecoli.csv | cut -d : -f 1)"
   # Copy SeqSero's predicted serotype
-  o_type="$(awk -F $'\t' 'FNR == 7 {print $6}' ./serotypeFinder_output/${i}/results_table.txt)"
+  o_type="$(awk -F $'\t' 'FNR == 8 {print $6}' ./serotypeFinder_output/${i}/results_table.txt)"
   h_type="$(awk -F $'\t' 'FNR == 3 {print $6}' ./serotypeFinder_output/${i}/results_table.txt)"
   ecoli_serotype="${o_type}:${h_type}"
   # Edit ecoli.csv to include SeqSero results
