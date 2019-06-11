@@ -25,30 +25,10 @@ All results are compiled into a single Tredegar report. This report can be acces
 
 ##Basic usage: 
 
-````sh
-$ tredegar.sh -i <input> -o <output_dir>
+````
+$ tredegar.py <input_dir> -o <output_dir>
 ````
 
-Tredegar assumes `<input>` to be a DCLS BaseSpace project within the mounted BaseSpace profile that contains multiple samples and read files ending in  R[1,2]_001.fastq.gz 
+Tredegar assumes `<input_dir>` to be populated with paired-end fastq files; can also be a BaseMounted Project directory 
 
 
-Note: if the pipeline breaks durring analysis, do **not** restart Tredegar by running the same command. Instead, change to the output directory and type `make`.
-
-````sh
-$ cd <output_dir>
-$ make
-````
-## Scripts
-
-|  Script | Discription   | 
-| --- | --- |
-|rename\_basespace\_files.sh | Removes cruft (i.e. set number) from BaseSpace File name|
-|initial\_id.sh | Runs MASH, a fast genome and metagenome distance estimation using MinHash, to determine the taxonomic identitify of all isolates with high resolution up to the species level.|
-|tredegar_report.sh| Generates a raw.csv file containing MASH results
-|assemble_ecoli.sh| Runs SPAdes to generate *de novo* assemblies for *E.coli* isolates to be used as input to serotypeFinder|
-|ecoli\_serotype.sh| Runs serotypeFinder to serotype *E.coli* isolates|
-|add\_ecoli\_sero.sh| Updates raw.csv to include serotypeFinder results; the updated .csv file is saved to ecoli.csv|
-|sal_serotype.sh| Runs SeqSero to serotype *Salmonella* spp. isolates|
-|add\_sal\_sero.sh| Updates ecoli.csv to include SeqSero results; the updated .csv file is saved to ecoli_sal.csv|
-|Makefile| Runs all of the above shell scripts and generates the final Tredegar report|
-|tredegar.sh| Main executable that assures proper input files exist, creates a project directory and runs the Makefile
