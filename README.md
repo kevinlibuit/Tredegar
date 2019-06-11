@@ -23,7 +23,7 @@ All results are compiled into a single Tredegar report. This report can be acces
 <sup>\*The majority of isolates sequenced at the DCLS are *Salonella* spp. and *Escherichia coli*. For this reason, verification of species does little for quality assurance. E.g. if an entire sequencing run contains *Salmonella enterica* isoaltes of different serotypes, confirming the species will not help to identify mislabeled samples within that run. </sup>
 
 
-##Basic usage: 
+## Basic usage: 
 
 ````
 $ tredegar.py <input_dir> -o <output_dir>
