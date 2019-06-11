@@ -1,99 +1,62 @@
-# seq_ID dependencies installation script for an AWS EC2 instance launched from the DCLS GDIP image ami-9f630088.
+################################################################################
+## apt
+################################################################################
+## Update existing software
+# apt-get update will update the list of available packages and their versions,
+# but it does not install/upgrade.
+sudo apt-get -y update
 
+# apt-get upgrade actually installs newer versions of the packages you have.
+# After updating the lists, the package manager knows about available updates
+# for the software you have installed. This is why you first want to update.
+sudo apt-get -y upgrade
 
-# custom colours for terminal
-echo "export LSCOLORS=ExGxBxDxCxEgEdxbxgxcxd" >> ~/.bashrc
-echo "source ~/.bashrc" >> ~/.bash_profile
+# install some essentials
+sudo apt-get -y install build-essential gcc make cmake ruby curl git vim parallel unzip default-jre
+sudo apt-get -y install zlib1g-dev libxml2-dev libcurl4-openssl-dev
+sudo apt-get -y install libcurl4-gnutls-dev libssl-dev
+sudo apt-get -y install tree htop mosh firefox pandoc
 
 ################################################################################
-MASH
+## Docker CE
 ################################################################################
+sudo apt-get update
+sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+# Verify key by running:
+sudo apt-key fingerprint 0EBFCD88
+# should return:
+#    pub   4096R/0EBFCD88 2017-02-22
+#          Key fingerprint = 9DC8 5822 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88
+#    uid                  Docker Release (CE deb) <docker@docker.com>
+#    sub   4096R/F273FCD8 2017-02-22)
+sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+sudo apt-get update
+sudo apt-get install docker-ce
+# Test install with:
+sudo docker run hello-world
 
-# MASH binary
-wget https://github.com/marbl/Mash/releases/download/v1.1.1/mash-Linux64-v1.1.1.tar.gz
-tar -xzvf mash-Linux64-v1.1.1.tar.gz
-echo 'export PATH=~/mash-Linux64-v1.1.1/:$PATH' >> ~/.bash_profile
-rm mash-Linux64-v1.1.1.tar.gz
-
-# Hashed RefSeq db
-wget https://gembox.cbcb.umd.edu/mash/RefSeqSketchesDefaults.msh.gz
-gunzip RefSeqSketchesDefaults.msh.gz
-sudo mv RefSeqSketchesDefaults.msh /opt/genomes 
-
-################################################################################
-## seqsero
-################################################################################
-
-# dependencies
-sudo apt-get upgrade
-wget https://sourceforge.net/projects/bio-bwa/files/bwa-0.7.15.tar.bz2
-tar -xjvf bwa-0.7.15.tar.bz2
-cd bwa-0.7.15
-make
-cp bwa /usr/bin/
-rm -rf bwa-0.7.15.tar.bz2
-
-# seqsero
-git clone https://github.com/denglab/SeqSero.git
-echo 'export PATH=~/SeqSero/:$PATH' >> ~/.bash_profile
+# Setup Docker group: https://askubuntu.com/questions/477551/how-can-i-use-docker-without-sudo
+sudo groupadd docker
+sudo gpasswd -a $USER docker
+newgrp docker
 
 
 ################################################################################
-## serotypeFinder + SPAdes
+## Python Libraries CE & BaseMount
 ################################################################################
+# Pip3: https://www.digitalocean.com/community/tutorials/how-to-install-python-3-and-set-up-a-local-programming-environment-on-ubuntu-16-04
+sudo apt-get install -y python3-pip
 
-## serotypeFinder dependencies 
-curl -L http://install.perlbrew.pl | bash
-echo "source ~/perl5/perlbrew/etc/bashrc" >> ~/.bash_profile
-source ~/.bash_profile
+# Docker, pandas, psutil
+pip3 install docker
+pip3 install pandas
+pip3 install psutil
 
-perlbrew init
-perlbrew install-cpanm
-
-sudo apt-get install expat apache2
-# apache src located in /var/www/html/
-
-# install blast legacy
-wget ftp://ftp.ncbi.nlm.nih.gov/blast/executables/legacy/2.2.26/blast-2.2.26-x64-linux.tar.gz
-tar -zxvf blast-2.2.26-x64-linux.tar.gz
-sudo mv blast-2.2.26 /opt/software/
-rm blast-2.2.26-x64-linux.tar.gz
-
-
-perl -MCPAN -e shell
-# in cpan shell
-cpan> install Module::Build
-cpan> o conf prefer_installer MB
-cpan> o conf commit
-cpan> force install CJFIELDS/BioPerl-1.6.924.tar.gz
-cpan> install Data::Dumper
-cpan> install Getopt::Long
-cpan> install Try::Tiny::Retry
-cpan> q
-
-
-# clone serotypeFinder repo
-git clone https://bitbucket.org/genomicepidemiology/serotypefinder.git
-echo 'export PATH=~/serotypefinder/:$PATH' >> ~/.bash_profile
-
-# get salmonella serotype database
-cd ~/serotypefinder
-./INSTALL_DB seroTF_database
-sudo mv ~/serotypefinder/seroTF_database /opt/genomes/
-
-# SPAdes binary
-wget http://spades.bioinf.spbau.ru/release3.9.0/SPAdes-3.9.0-Linux.tar.gz
-tar -xzf SPAdes-3.9.0-Linux.tar.gz
-echo 'export PATH=~/SPAdes-3.9.0-Linux/bin/:$PATH' >> ~/.bash_profile
-rm SPAdes-3.9.0-Linux.tar.gz
-
-source ~/.bash_profile
-
-################################################################################
-## BaseMount
-################################################################################
-
+# BaseMount
 sudo bash -c "$(curl -L https://basemount.basespace.illumina.com/install)"
-mkdir BaseSpace
-basement BaseSpace
-# copy link to browser and sign-in to BaseSpace account
+Mkdir ~/BaseSpace
+Basemount ~/BaseSpace
