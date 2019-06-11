@@ -1,4 +1,4 @@
-# Tredegar
+# Tredegar 2.0
 A bioinformatics pipeline for organism identification and sample-label verification of whole genome sequence (WGS) data produced at the DCLS
 
 
