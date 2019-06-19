@@ -11,7 +11,7 @@ import pandas
 import datetime
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
 
-from Tredegar.lib import run_mash, run_cg_pipeline, run_seqsero, run_serotypefinder, run_shovill
+from Tredegar.lib import run_mash, run_cg_pipeline, run_seqsero, run_serotypefinder, run_shovill, run_quast
 
 def main():
     parser = argparse.ArgumentParser(usage="tredegar.py <input> [options]")
