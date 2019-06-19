@@ -64,43 +64,41 @@ class Shovill:
 
             id = self.runfiles.reads[read].id
 
-            if 'Escherichia' not in mash_species[id]:
-                    pass
-            else:
-                shovill_results = "%s/%s/"%(shovill_out_dir, id)
-                if not os.path.isdir(shovill_results):
-                    os.makedirs(shovill_results)
 
-                if not os.path.isfile(shovill_results + "/contigs.fa"):
-                    # change self.path to local dir if path is a basemounted dir
-                    if os.path.isdir(self.path + "/AppResults"):
-                        self.path = self.output_dir
+            shovill_results = "%s/%s/"%(shovill_out_dir, id)
+            if not os.path.isdir(shovill_results):
+                os.makedirs(shovill_results)
 
-                    # get paths to fastq files
-                    if self.runfiles.reads[read].paired:
-                        fwd = os.path.abspath(self.runfiles.reads[read].fwd).replace(self.path, "")
-                        rev = os.path.abspath(self.runfiles.reads[read].rev).replace(self.path,"")
-                    else:
-                        fastq = os.path.basename(self.runfiles.reads[read].path)
+            if not os.path.isfile(shovill_results + "/contigs.fa"):
+                # change self.path to local dir if path is a basemounted dir
+                if os.path.isdir(self.path + "/AppResults"):
+                    self.path = self.output_dir
 
-                    # create paths for data
-                    mounting = {self.path:'/datain',shovill_results:'/dataout'}
-                    out_dir = '/dataout'
-                    in_dir = '/datain'
+                # get paths to fastq files
+                if self.runfiles.reads[read].paired:
+                    fwd = os.path.abspath(self.runfiles.reads[read].fwd).replace(self.path, "")
+                    rev = os.path.abspath(self.runfiles.reads[read].rev).replace(self.path,"")
+                else:
+                    fastq = os.path.basename(self.runfiles.reads[read].path)
 
-                    # build command for creating sketches and generating mash distance table
-                    # TODO write elif to catch single read data
+                # create paths for data
+                mounting = {self.path:'/datain',shovill_results:'/dataout'}
+                out_dir = '/dataout'
+                in_dir = '/datain'
 
-                    if self.runfiles.reads[read].paired:
-                        command = "bash -c 'shovill --outdir {out_dir}/ -R1 {in_dir}/{fwd} -R2 {in_dir}/{rev} --ram " \
-                                  "{mem} --cpus {cpu} {extra_params} --force'".format(in_dir=in_dir, out_dir=out_dir,
-                                                                              threads=self.threads,
-                                                                              extra_params=self.extra_params, mem=mem,
-                                                                              cpu=cpu, fwd=fwd,rev=rev)
+                # build command for creating sketches and generating mash distance table
+                # TODO write elif to catch single read data
 
-                    # call the docker process
-                    print("Generating shovill assembly for sample " + id)
-                    calldocker.call("staphb/shovill:1.0.4",command,'/dataout',mounting)
+                if self.runfiles.reads[read].paired:
+                    command = "bash -c 'shovill --outdir {out_dir}/ -R1 {in_dir}/{fwd} -R2 {in_dir}/{rev} --ram " \
+                              "{mem} --cpus {cpu} {extra_params} --force'".format(in_dir=in_dir, out_dir=out_dir,
+                                                                          threads=self.threads,
+                                                                          extra_params=self.extra_params, mem=mem,
+                                                                          cpu=cpu, fwd=fwd,rev=rev)
+
+                # call the docker process
+                print("Generating shovill assembly for sample " + id)
+                calldocker.call("staphb/shovill:1.0.4",command,'/dataout',mounting)
 
                 print("Shovill assembly for isolate %s located at %s"%(id,shovill_results))
 
