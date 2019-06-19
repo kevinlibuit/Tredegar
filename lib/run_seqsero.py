@@ -70,10 +70,10 @@ class SeqSero:
                 else:
                     fastq = os.path.basename(self.runfiles.reads[read].path)
 
-                if "R1" in fwd:
-                    reads = fwd.replace("R1", "*")
+                if "R1.fastq" in fwd:
+                    reads = fwd.replace("R1.fastq", "*.fastq")
                 else:
-                    reads = fwd.replace("_1", "*")
+                    reads = fwd.replace("_1.fastq", "*.fastq")
 
                 # create paths for data
                 # create paths for data
@@ -91,7 +91,7 @@ class SeqSero:
                                   "-d {out_dir}'".format(in_dir=in_dir,out_dir=out_dir, reads=reads)
 
                         # call the docker process
-                        print("Predicting Salmonella serotype for isolate " + id)
+                        print("Predicting Salmonella serotype for isolate " + id )
                         calldocker.call("staphb/seqsero:1.0.1", command, '/dataout', mounting)
 
                 else:
