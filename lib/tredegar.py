@@ -11,7 +11,7 @@ import pandas
 import datetime
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
 
-from Tredegar.lib import run_mash, run_cg_pipeline, run_seqsero, run_serotypefinder
+from Tredegar.lib import run_mash, run_cg_pipeline, run_seqsero, run_serotypefinder, run_shovill
 
 def main():
     parser = argparse.ArgumentParser(usage="tredegar.py <input> [options]")
@@ -46,6 +46,9 @@ def main():
     mash_obj = run_mash.Mash(path=path,output_dir=output_dir)
     mash_species = mash_obj.mash_species()
 
+    shovill_obj = run_shovill.Shovill(path=path, output_dir=output_dir)
+    shovill_obj.shovill()
+
     cgpipeline_obj = run_cg_pipeline.CGPipeline(path=path,output_dir=output_dir)
     cgpipeline_obj.read_metrics()
 
@@ -59,7 +62,8 @@ def main():
     matched_wzy = ["O13","O135","O17","O44","O123","O186"]
     # Store results in single dictionary
     for id in mash_species:
-        isolate_qual[id] = {"r1_q": None, "r2_q": None, "est_cvg": None, "species": None, "serotype": None}
+        isolate_qual[id] = {"r1_q": None, "r2_q": None, "est_genome_length": None,
+                            "est_cvg": None, "predicted_species": None, "predicted_serotype": None}
 
         isolate_qual[id]["species"] = mash_species[id]
 
@@ -79,19 +83,22 @@ def main():
                 tsv_reader = csv.reader(tsv_file, delimiter="\t")
                 for line in tsv_reader:
                     if "Predicted serotype(s)" in line[0]:
-                        isolate_qual[id]["serotype"] = line[1]
+                        isolate_qual[id]["predicted_serotype"] = line[1]
+
+        with open("%s/quast_output/%s/report.tsv" % (output_dir, id)) as tsv_file:
+            tsv_reader = csv.reader(tsv_file, delimiter="\t")
+            for line in tsv_reader:
+                if "Total length" in line[0]:
+                    isolate_qual[id]["est_genome_length"]= line[1]
 
         if os.path.isfile("%s/serotypeFinder_output/%s/results_tab.txt" % (output_dir, id)):
             with open("%s/serotypeFinder_output/%s/results_tab.txt" % (output_dir, id)) as tsv_file:
                 tsv_reader = csv.reader(tsv_file, delimiter="\t")
-                h_type=""
                 wzx_allele=""
                 wzy_allele=""
                 wzm_allele=""
 
                 for line in tsv_reader:
-                    if "fl" in line[0]:
-                        h_type = line[5]
 
                     if line[0] == "wzx":
                         wzx_allele = line[5]
@@ -110,7 +117,7 @@ def main():
                     o_type = wzy_allele
                 if o_type in matched_wzy:
                     o_type = wzx_allele
-                isolate_qual[id]["serotype"] = "%s:%s"%(h_type,o_type)
+                isolate_qual[id]["predicted_serotype"] = o_type
 
     # Curate Tredegar report
 
@@ -123,7 +130,8 @@ def main():
         print("Directory for WGS reports made:", reports_dir)
 
     # Change data dictionary to dataframe to csv
-    df = pandas.DataFrame(isolate_qual).T[["r1_q", "r2_q", "est_cvg", "species", "serotype"]]
+    df = pandas.DataFrame(isolate_qual).T[["r1_q", "r2_q", "est_genome_length",
+                                           "est_cvg", "predicted_species", "predicted_serotype"]]
     df.to_csv(tredegar_out)
 
     print("Tredegar is complete! Output saved as %s"%tredegar_out)
