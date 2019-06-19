@@ -56,45 +56,49 @@ class Mash:
             # get id
             id = self.runfiles.reads[read].id
             mash_result = "/" + id + "_distance.tab"
+            mash_info = "/" + id  + "_mash_info.txt"
 
-            if os.path.isfile(mash_out_dir + mash_result):
-                pass
+            # change self.path to local dir if path is a basemounted dir
+            if os.path.isdir(self.path + "/AppResults"):
+                self.path = self.output_dir
+
+            # get paths to fastq files
+            if self.runfiles.reads[read].paired:
+                fwd = os.path.abspath(self.runfiles.reads[read].fwd).replace(self.path, "")
+                rev = os.path.abspath(self.runfiles.reads[read].rev).replace(self.path,"")
             else:
+                fastq = os.path.basename(self.runfiles.reads[read].path)
 
-                # change self.path to local dir if path is a basemounted dir
-                if os.path.isdir(self.path + "/AppResults"):
-                    self.path = self.output_dir
+            # create paths for data
+            mounting = {self.path:'/datain',mash_out_dir:'/dataout'}
+            if str(db_name) != "RefSeqSketchesDefaults.msh":
+                mounting.update({os.path.dirname(os.path.realpath(self.db)):'/db'})
+            out_dir = '/dataout'
+            in_dir = '/datain'
 
-                # get paths to fastq files
-                if self.runfiles.reads[read].paired:
-                    fwd = os.path.abspath(self.runfiles.reads[read].fwd).replace(self.path, "")
-                    rev = os.path.abspath(self.runfiles.reads[read].rev).replace(self.path,"")
-                else:
-                    fastq = os.path.basename(self.runfiles.reads[read].path)
+            # build command for creating sketches and generating mash distance table
+            # TODO write elif to catch single read data
 
-                # create paths for data
-                mounting = {self.path:'/datain',mash_out_dir:'/dataout'}
-                if str(db_name) != "RefSeqSketchesDefaults.msh":
-                    mounting.update({os.path.dirname(os.path.realpath(self.db)):'/db'})
-                out_dir = '/dataout'
-                in_dir = '/datain'
+            if self.runfiles.reads[read].paired:
+                sketch = "bash -c 'cat {in_dir}/{fwd} {in_dir}/{rev} | mash sketch -r -m 2 - " \
+                         "-o {out_dir}/{sketch}'".format(in_dir=in_dir,out_dir=out_dir,sketch=id + "_sketch",
+                                                         fwd=fwd,rev=rev)
+                info = "bash -c 'mash info -t {out_dir}/{sketch} > {out_dir}" \
+                       "/{mash_info}'".format(in_dir=in_dir,out_dir=out_dir, sketch=id+ "_sketch.msh",
+                                                         mash_info=mash_info)
+                dist = "bash -c 'mash dist /db/{db} {out_dir}/{sketch} > " \
+                       "{out_dir}/{mash_result}'".format(in_dir=in_dir,out_dir=out_dir, sketch=id+ "_sketch.msh",
+                                                         mash_result=mash_result, db=db_name)
 
-                # build command for creating sketches and generating mash distance table
-                # TODO write elif to catch single read data
 
-                if self.runfiles.reads[read].paired:
-                    sketch = "bash -c 'cat {in_dir}/{fwd} {in_dir}/{rev} | mash sketch -m 2 - " \
-                             "-o {out_dir}/{sketch}'".format(in_dir=in_dir,out_dir=out_dir,sketch=id + "_sketch",
-                                                             fwd=fwd,rev=rev)
-
-                    dist = "bash -c 'mash dist /db/{db} {out_dir}/{sketch} > " \
-                           "{out_dir}/{mash_result}'".format(in_dir=in_dir,out_dir=out_dir, sketch=id+ "_sketch.msh",
-                                                             mash_result=mash_result, db=db_name)
-
-                # call the docker process
-                if not os.path.isfile("%s/%s_sketch.msh"%(mash_out_dir, id)):
-                    print("Generating MASH sketch for sample " + id)
-                    calldocker.call("staphb/mash:2.1",sketch,'/dataout',mounting)
+            # call the docker process
+            if not os.path.isfile("%s/%s_sketch.msh"%(mash_out_dir, id)):
+                print("Generating MASH sketch for sample " + id)
+                calldocker.call("staphb/mash:2.1",sketch,'/dataout',mounting)
+            if not os.path.isfile("%s/%s_mash_info.txt"%(mash_out_dir, id)):
+                print("Generating MASH info for sample " + id)
+                calldocker.call("staphb/mash:2.1", info,'/dataout',mounting)
+            if not os.path.isfile(mash_out_dir + mash_result):
                 print("Running MASH for sample " + id)
                 calldocker.call("staphb/mash", dist, '/dataout',mounting)
 
