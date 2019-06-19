@@ -90,12 +90,6 @@ class Quast:
                 calldocker.call("staphb/quast:5.0.0",command,'/dataout/',mounting)
 
 
-
-                print("Genome Length: " + genome_length)
-
-                #print("Quast assembly metrics saved to: %s"%(quast_out_dir))
-
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(usage="run_quast.py <input> [options]")
     parser.add_argument("input", type=str, nargs='?', help="path to dir containing read files")
