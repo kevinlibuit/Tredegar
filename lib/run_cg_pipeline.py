@@ -7,9 +7,10 @@ import os,sys
 sys.path.append(os.path.abspath(os.path.dirname(__file__) + '/' + '../..'))
 
 import argparse
+import csv
 from Tredegar.core import fileparser
 from Tredegar.core import calldocker
-from Tredegar.lib import run_mash
+from Tredegar.lib import run_quast
 
 class CGPipeline:
     #class object to contain fastq file information
@@ -42,13 +43,14 @@ class CGPipeline:
             os.makedirs(cg_out_dir)
             print("Directory for CG Pipeline output made: ", cg_out_dir)
 
-        mash_samples = run_mash.Mash(path=self.path, output_dir=self.output_dir)
-        mash_species = mash_samples.mash_species()
-
         for read in self.runfiles.reads:
             #get id
             id = self.runfiles.reads[read].id
             cgp_result = id + "_readMetrics.tsv"
+
+            if not os.path.isfile("%s/quast_output/%s/report.tsv" % (self.output_dir, id)):
+                quast_obj = run_quast.Quast(path=self.path, output_dir=self.output_dir)
+                quast_obj.quast()
 
             if not os.path.isfile(cg_out_dir + cgp_result):
 
@@ -69,26 +71,12 @@ class CGPipeline:
                 out_dir = '/dataout'
                 in_dir = '/datain'
 
-                mash_samples = run_mash.Mash(path=self.path, output_dir=self.output_dir)
-                mash_species = mash_samples.mash_species()
+                with open("%s/quast_output/%s/report.tsv" % (output_dir, id)) as tsv_file:
+                    tsv_reader = csv.reader(tsv_file, delimiter="\t")
+                    for line in tsv_reader:
+                        if "Total length" in line[0]:
+                            genome_length = line[1]
 
-                if 'Salmonella' in mash_species[id] or 'Escherichia' in mash_species[id] \
-                        or 'Shigella' in mash_species[id]:
-                    genome_length = 5.0
-                elif 'Campylobacter' in mash_species[id]:
-                    genome_length = 1.6
-                elif 'Listeria' in mash_species[id]:
-                    genome_length = 3.0
-                elif 'Vibrio' in mash_species[id]:
-                    genome_length = 4.0
-                else:
-                    genome_length = input("In Mbp, what is the expected genome size of %s?" % (id))
-                    try:
-                        float(genome_length)
-                    except ValueError:
-                        print("A number was not entered")
-
-                genome_length = float(genome_length)*1000000
                 print("Estimated genome length for isolate %s: " % id + str(int(genome_length)))
 
                 # build command for running run_assembly_readMetrics.pl
