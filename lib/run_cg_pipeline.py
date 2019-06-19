@@ -48,9 +48,7 @@ class CGPipeline:
             id = self.runfiles.reads[read].id
             cgp_result = id + "_readMetrics.tsv"
 
-            if not os.path.isfile("%s/quast_output/%s/report.tsv" % (self.output_dir, id)):
-                quast_obj = run_quast.Quast(path=self.path, output_dir=self.output_dir)
-                quast_obj.quast()
+
 
             if not os.path.isfile(cg_out_dir + cgp_result):
 

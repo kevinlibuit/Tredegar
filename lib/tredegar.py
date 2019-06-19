@@ -49,6 +49,9 @@ def main():
     shovill_obj = run_shovill.Shovill(path=path, output_dir=output_dir)
     shovill_obj.shovill()
 
+    quast_obj = run_quast.Quast(path=self.path, output_dir=self.output_dir)
+    quast_obj.quast()
+
     cgpipeline_obj = run_cg_pipeline.CGPipeline(path=path,output_dir=output_dir)
     cgpipeline_obj.read_metrics()
 
