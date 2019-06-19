@@ -60,7 +60,7 @@ class RunFiles:
         for root,dirs,files in os.walk(path):
             #scan path and look for fastq files then gather ids and store in temp lists
             for file in files:
-                if '.fastq' in file or '.fastq.gz' in file:
+                if '.fastq' in file or '.fastq.gz' in file and 'spades' not in root and '/samples/' not in root:
                     #get id and check if we have seen this id before by adding to id list and creating a new read object
                     id = file.split('_')[0]
                     if id not in self.ids:
@@ -68,14 +68,14 @@ class RunFiles:
                         self.reads[id] = self.Fastqs(id)
 
                     #if fastq file is foward reads add path to .fwd
-                    if '_R1' in file or '_1' in file:
+                    if '_R1' in file or '_1' in file and 'spades' not in root and 'cfsansnp_output' not in root:
                         if not self.reads[id].fwd:
                             self.reads[id].fwd = root + '/' + file
-                    #if fastq file is reverese reads add path to .rev
-                    elif '_R2' in file or '_2' in file:
+                    # if fastq file is reverese reads add path to .rev
+                    elif '_R2' in file or '_2' in file and 'spades' not in root and 'cfsansnp_output' not in root:
                         if not self.reads[id].rev:
                             self.reads[id].rev = root + '/' + file
-                    #if fastq file is unpaired or interleaved add path to .path
+                    # if fastq file is unpaired or interleaved add path to .path
                     #TODO consider the impact of this and determine best method
                     else:
                         if not self.reads[id].path:
