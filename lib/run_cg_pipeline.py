@@ -69,7 +69,7 @@ class CGPipeline:
                 out_dir = '/dataout'
                 in_dir = '/datain'
 
-                with open("%s/quast_output/%s/report.tsv" % (output_dir, id)) as tsv_file:
+                with open("%s/quast_output/%s/report.tsv" % (self.output_dir, id)) as tsv_file:
                     tsv_reader = csv.reader(tsv_file, delimiter="\t")
                     for line in tsv_reader:
                         if "Total length" in line[0]:
