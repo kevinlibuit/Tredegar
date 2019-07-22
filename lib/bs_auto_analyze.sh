@@ -90,8 +90,11 @@ do
             else
                 echo "Running Tredegar on ${p}"
                 tredegar.py ${basemount_dir}/Projects/${p} -o ./${p}
-                mkdir ${basemount_dir}/Projects/${p}/AppResults/Tredegar
-                cp ./${p}/reports/*tredegar_report.csv ${basemount_dir}/Projects/${p}/AppResults/Tredegar/
+                if [ ! -n ${basemount_dir}/Projects/${p}/AppResults/Tredegar}
+		then 
+		    mkdir ${basemount_dir}/Projects/${p}/AppResults/Tredegar
+	    	fi
+		cp ./${p}/reports/*tredegar_report.csv ${basemount_dir}/Projects/${p}/AppResults/Tredegar/
                 cd ${basemount_dir}/Projects/${p}/AppResults/Tredegar/ && basemount-cmd mark-as-complete
                 cd $output_dir
 
