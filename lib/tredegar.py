@@ -68,7 +68,7 @@ def main():
         isolate_qual[id] = {"r1_q": None, "r2_q": None, "est_genome_length": None,
                             "est_cvg": None, "predicted_species": None, "predicted_serotype": None}
 
-        isolate_qual[id]["species"] = mash_species[id]
+        isolate_qual[id]["predicted_species"] = mash_species[id]
 
         with open("%s/cg_pipeline_output/%s_readMetrics.tsv"%(output_dir,id)) as tsv_file:
             tsv_reader = list(csv.DictReader(tsv_file, delimiter="\t"))
