@@ -22,7 +22,7 @@ separated list, e.g.
 #----#----#----#----#----#----#----#----#----#----
 
 basemount_dir=$1
-output_dir=pwd
+output_dir=$2
 
 # ensure basemount_dir exists
 if [ -z "${basemount_dir}" ]
@@ -53,7 +53,7 @@ done
 
 # Add specified projects to projects_to_analyze.log
 touch ./projects_to_analyze.log
-for p in $(echo $2 | sed "s/,/ /g")
+for p in $(echo $3 | sed "s/,/ /g")
 do
     if ! grep -wq "${p}" ./projects_to_analyze.log
     then
@@ -90,7 +90,7 @@ do
             else
                 echo "Running Tredegar on ${p}"
                 tredegar.py ${basemount_dir}/Projects/${p} -o ./${p}
-                if [ ! -n ${basemount_dir}/Projects/${p}/AppResults/Tredegar}
+                if [ ! -f ${basemount_dir}/Projects/${p}/AppResults/Tredegar ]
 		then 
 		    mkdir ${basemount_dir}/Projects/${p}/AppResults/Tredegar
 	    	fi
