@@ -85,7 +85,11 @@ def main():
             with open("%s/seqsero_output/%s/Seqsero_result.txt" % (output_dir, id)) as tsv_file:
                 tsv_reader = csv.reader(tsv_file, delimiter="\t")
                 for line in tsv_reader:
-                    if "Predicted serotype(s)" in line[0]:
+                    try:
+                        prediction=line[0]
+                    except:
+                        prediction='error'
+                    if "Predicted serotype(s)" in prediction:
                         isolate_qual[id]["predicted_serotype"] = line[1]
 
         with open("%s/quast_output/%s/report.tsv" % (output_dir, id)) as tsv_file:
